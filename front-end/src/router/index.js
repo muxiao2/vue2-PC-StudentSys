@@ -21,6 +21,11 @@ export default new Router({
     // }
     // 官方推荐懒加载路由
     {
+      path: '/',
+      redirect:'/login',
+      hidden: true
+    },
+    {
       path: '/home',
       name: 'Home',
       component: () => import('@/components/Home'),
