@@ -27,13 +27,13 @@
                 </div>
             </el-form>
             <!-- 表格 -->
-            <el-table :data="tableData" height="calc(100% - 103px)" border style="width: 100%">
+            <el-table :data="tableData.slice((currentPage - 1) * pageSize,currentPage * pageSize)" height="calc(100% - 103px)" border style="width: 100%">
                 <el-table-column fixed align="center" prop="name" label="Name" width="120"></el-table-column>
-                <el-table-column align="center" prop="gender" label="Gender" width="120"></el-table-column>
+                <el-table-column align="center" prop="gender_text" label="Gender" width="120"></el-table-column>
                 <el-table-column align="center" prop="age" label="Age" width="120"></el-table-column>
                 <el-table-column align="center" prop="studentid" label="Student ID"></el-table-column>
                 <el-table-column align="center" prop="class" label="Class"></el-table-column>
-                <el-table-column align="center" prop="state" label="State" width="120"></el-table-column>
+                <el-table-column align="center" prop="state_text" label="State" width="120"></el-table-column>
                 <el-table-column align="center" prop="address" label="Address"></el-table-column>
                 <el-table-column align="center" prop="concat" label="Concat"></el-table-column>
                 <el-table-column align="center" label="Operate">
@@ -44,7 +44,7 @@
                 </el-table-column>
             </el-table>
             <!-- 分页 -->
-            <Paging :total="total"></Paging>
+            <Paging :total="total" @numChange="pageChanges"></Paging>
              <!-- 弹窗 -->
             <el-dialog :title="state ? 'Edit Student Information' : 'Add Student Information'" :visible.sync="dialogFormVisible" width="520px">
                 <el-form :model="form">
@@ -96,410 +96,12 @@ export default {
     components: {
         Paging
     },
+    props: {
+        'total': Number
+    },
     data() {
         return {
-            tableData: [{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class1',
-                state: '在校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
-                {
-                name: 'muxiao',
-                gender: '2',
-                age: '18',
-                studentid: '2055001007',
-                class: 'class2',
-                state: '离校',
-                address: '上海市普陀区金沙江路1518弄',
-                concat: '180-xxxx-xxxx'
-                },
+            tableData: [
             ],
             formInline: {
                 name: '',
@@ -519,12 +121,53 @@ export default {
             },
             formLabelWidth: '90px',
             state: false,
-            total: 400
+            total: 0,
+            currentPage: 1,
+            // 每页显示条数
+            pageSize: 20,
         }
+    },
+    created() {
+        this.service.get('studentlist')
+        .then(res => {
+            if(res.status === 200) {
+                // console.log(res);
+                res.data.data.forEach(item => {
+                    switch(item.gender) {
+                        case "1":
+                            item.gender_text = "男"
+                            break;
+                        case "2":
+                            item.gender_text = "女"
+                            break;  
+                    }
+                    switch(item.state) {
+                        case "1":
+                            item.state_text = "在读"
+                            break;
+                        case "2":
+                            item.state_text = "毕业"
+                            break;
+                    }
+                })
+                // es6展开运算符
+                this.total = res.data.total
+                this.tableData = [...res.data.data]
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
     },
     methods: {
         onsubmit() {
             console.log('submit!');
+        },
+        // 分页
+        pageChanges(currentPage, pageSize) {
+            console.log(currentPage, pageSize);
+            this.pageSize = pageSize
+            this.currentPage = currentPage
         },
         AddConfirmHandle() {
             this.dialogFormVisible = false

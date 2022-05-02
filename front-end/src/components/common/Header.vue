@@ -4,7 +4,7 @@
             <router-link to="/home">
             <i class="fas fa-closed-captioning"></i>MX
             </router-link>
-            <div>muxiao</div>
+            <div>{{ username }}</div>
         </el-header>
     </div>
 </template>
@@ -14,9 +14,12 @@
 export default {
     data() {
         return {
-
+            username: ''
         }
-    }
+    },
+    created() {
+        this.username = localStorage.getItem('username')
+    },
 }
 </script>
 

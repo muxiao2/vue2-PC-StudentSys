@@ -21,9 +21,9 @@
                 </div>
             </el-form>
             <!-- 表格 -->
-            <el-table :data="tableData" height="calc(100% - 103px)" border style="width: 100%">
+            <el-table :data="tableData.slice((currentPage - 1) * pageSize,currentPage * pageSize)" height="calc(100% - 103px)" border style="width: 100%">
                 <el-table-column fixed align="center" prop="name" label="Name" width="120"></el-table-column>
-                <el-table-column align="center" prop="gender" label="Gender" width="100"></el-table-column>
+                <el-table-column align="center" prop="gender_text" label="Gender" width="100"></el-table-column>
                 <el-table-column align="center" prop="age" label="Age" width="100"></el-table-column>
                 <el-table-column align="center" prop="birthDate" label="Birth Date" width="120"></el-table-column>
                 <el-table-column align="center" prop="idNumber" label="ID Number" width="120"></el-table-column>
@@ -40,7 +40,7 @@
                 </el-table-column>
             </el-table>
             <!-- 分页 -->
-            <Paging :total="total"></Paging>
+            <Paging :total="total" @numChange="pageChanges"></Paging>
              <!-- 弹窗 -->
             <el-dialog :title="state ? 'Edit Student Information' : 'Add Student Information'" :visible.sync="dialogFormVisible" width="550px">
                 <el-form :model="form">
@@ -93,350 +93,7 @@ export default {
     },
     data() {
         return {
-            tableData: [{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },{
-                name: 'muxiao',
-                gender: '1',
-                age: '18',
-                birthDate: '20010606',
-                idNumber: '122341',
-                father: '1',
-                mother: '1',
-                homeAddress: '上海市普陀区金沙江路1518弄',
-                inDate: '1212',
-                concat: '180-xxxx-xxxx'
-                },
-                
-            ],
+            tableData: [],
             formInline: {
                 name: '',
                 studentId: '',
@@ -456,12 +113,40 @@ export default {
             },
             formLabelWidth: '120px',
             state: false,
-            total: 400
+            total: 0
         }
+    },
+    created() {
+        this.service.get('/studentinformation')
+        .then(res => {
+            if(res.status === 200) {
+                console.log(res);
+                res.data.data.forEach(item => {
+                    switch(item.gender) {
+                        case "1":
+                            item.gender_text = "男"
+                            break;
+                        case "2":
+                            item.gender_text = "女"
+                            break;  
+                    }
+                })
+                // es6展开运算符
+                this.total = res.data.total
+                this.tableData = [...res.data.data]
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
     },
     methods: {
         onsubmit() {
             console.log('submit!');
+        },
+        pageChanges(currentPage, pageSize) {
+            this.pageSize = pageSize;
+            this.currentPage = currentPage;
         },
         AddConfirmHandle() {
             this.dialogFormVisible = false
@@ -481,7 +166,6 @@ export default {
             this.dialogFormVisible = true
         },
         deleteHandle(row) {
-        // 写法一：
             this.$confirm('Are you sure to delete the student\'s information?', 'Delete Remind', {
             confirmButtonText: 'Confirm',
             cancelButtonText: 'Cancel',

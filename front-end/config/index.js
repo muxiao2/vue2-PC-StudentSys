@@ -10,7 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      // '/api': {
+      //   target:'http://localhost:3000/',//后端接口地址
+      //   changeOrigin:true,//是否跨域
+      //   pathRewrite: {
+      //     '^/api': ''//以api开头的url才会开始转发，当访问localhost:8000/login转localhost:3000,要在baseURL中改/api
+      //   }//设置转发
+      // }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

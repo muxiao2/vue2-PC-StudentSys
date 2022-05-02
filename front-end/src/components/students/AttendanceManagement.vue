@@ -8,12 +8,12 @@
                     <el-input v-model="formInline.name" placeholder="Please enter student's name"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button class="btn-search" type="primary" @click="onSubmit" icon="el-icon-search">Search</el-button>
+                    <el-button class="btn-search" type="primary" @click="searchHandle" icon="el-icon-search">Search</el-button>
                 </el-form-item>
             </div>
         </el-form>
         <!-- 表格 -->
-        <el-table :data="tableData" height="calc(100% - 103px)" border style="width: 100%">
+        <el-table :data="tableData.slice((currentPage - 1) * pageSize,currentPage * pageSize)" height="calc(100% - 103px)" border style="width: 100%">
             <el-table-column fixed align="center" prop="name" label="Name" width="120"></el-table-column>
             <el-table-column align="center" prop="class" label="Class" width="180"></el-table-column>
             <el-table-column align="center" prop="due" label="To Be Due" width="180"></el-table-column>
@@ -23,7 +23,7 @@
             <el-table-column align="center" prop="attendanceRate" label="Attendance Rate"></el-table-column>
         </el-table>
         <!-- 分页 -->
-        <Paging :total="total"></Paging>
+        <Paging :total="total" @numChange="pageChanges"></Paging>
     </div>
 </template>
 
@@ -35,331 +35,86 @@ export default {
     },
     data() {
         return {
-            tableData: [{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },{
-                name: 'muxiao',
-                class: 'class01',
-                due: '123',
-                actual: '123',
-                attendance: '123',
-                attendanceRanking: '123',
-                attendanceRate: '123',
-                },
-            ],
+            tableData: [],
             formInline: {
                 name: '',
                 },
             dialogFormVisible: false,
             formLabelWidth: '90px',
             state: false,
-            total: 400
+            total: 0,
+            currentPage: 1,
+            // 每页显示条数
+            pageSize: 20,
         }
     },
+    created() {
+        this.getAttendanceData('attendance/find')
+        // this.service('attendance/find')
+        // .then(res => {
+        //     // console.log(res.data);
+        //     if(res.data.status === 200) {
+        //         this.tableData = [...res.data.data]
+        //     }
+        // })
+        // // this.service.get('/attendancemanagement')
+        // // .then(res => {
+        // //     if(res.status === 200) {
+        // //         console.log(res);
+        // //         res.data.data.forEach(item => {
+        // //             item.attendance_text = item.attendance * 100 + '%'
+        // //         })
+        // //         // es6展开运算符
+        // //         this.total = res.data.total
+        // //         this.tableData = [...res.data.data]
+        // //     }
+        // // })
+        // .catch(err => {
+        //     // console.log(err);
+        //     throw err
+        // })
+    },
     methods: {
-        
+        getAttendanceData(url) {
+            this.service(url)
+            .then(res => {
+                if(res.data.status === 200) {
+                    // console.log(res.data);
+                    this.tableData = [...res.data.data]
+                    this.total = res.data.total
+                }
+            })
+            .catch(err => {
+                // console.log(err);
+                throw err
+            })
+        },
+        searchHandle() {
+            // 非空校验
+            if(this.formInline.name === '') {
+                this.$message.error('The query condition cannot be empty!')
+                this.getAttendanceData()
+            }else {
+                // console.log(this.formInline.name);
+                this.service.get('attendance/find?name=' + this.formInline.name)
+                .then(res => {
+                this.formInline.name = ''
+                // console.log(res)
+                if(res.data.status === 200) {
+                    this.tableData = [...res.data.data]
+                }else {
+                    this.$message.error(res.data.msg)
+                }
+            })
+            .catch(err => {
+                throw err
+            })
+                } 
+        },
+        pageChanges(currentPage, pageSize) {
+            this.pageSize = pageSize;
+            this.currentPage = currentPage;
+        },
     }
 }
 </script>
@@ -377,10 +132,10 @@ export default {
     border-color: #10401c;
     color: #d3d6d9;
 }
-.attendance-management .el-dialog .el-form-item {
+/* .attendance-management .el-dialog .el-form-item {
     text-align: left;
 }
 .attendance-management .el-dialog .el-select {
     width: 100%;
-}
+} */
 </style>

@@ -28,10 +28,15 @@ export default {
     },
     methods: {
         handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+            this.pageSize = val
+            this.currentPage = 1
+        // console.log(`每页 ${val} 条`);
+            this.$emit("numChange", this.currentPage, this.pageSize)
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            this.currentPage = val
+            // console.log(`当前页: ${val}`);
+            this.$emit("numChange", this.currentPage, this.pageSize)
         }
     }
 }
