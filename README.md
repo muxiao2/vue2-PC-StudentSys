@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ------------------ Vue_PC_Parctice ------------------
 
 ### 一、项目准备
@@ -1043,3 +1044,9 @@ router.get('/', async function(req, res) {
     })
 });
 ```
+=======
+# vue-pc-student
+student
+<!-- 完善students前端页面，完成增删改查样式 -->
+完善students前端页面，完成增删改查样式
+>>>>>>> 9ded50c8b6aefa73d3eed06c1e09abb2525d9014
