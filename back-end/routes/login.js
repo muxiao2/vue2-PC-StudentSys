@@ -13,14 +13,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-    // console.log(req.body);
+    console.log(req.body);
     // 后端做校验
     if(req.body.username && req.body.password) {
       // 数据库查找
       let data = db.collection('admin').find();
-      // console.log(data);
+      console.log(data);
       data.toArray((err,result) => {
-        // console.log(result);
+        console.log(result);
         let pass = result.filter(currentValue => {
           // console.log(currentValue);
           return currentValue.username === req.body.username && currentValue.password === req.body.password
@@ -31,7 +31,7 @@ router.post('/', function(req, res, next) {
           //   res.send({ status:400, msg: '用户名或密码错误' })
           // }
         })
-        // console.log(pass);
+        console.log(pass);
         pass.length > 0 ? res.send({ status:200,msg: '登陆成功', username: pass[0].username }) : res.send({ status:400,msg: '用户名或密码错误' })
       });
     }else {

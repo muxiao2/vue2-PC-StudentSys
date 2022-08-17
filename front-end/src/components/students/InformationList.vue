@@ -1,5 +1,5 @@
 <template>
-    <div class="student-information">
+    <div class="information-list">
         <!-- 内容 -->
             <!-- 搜索栏 -->
             <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
@@ -43,7 +43,7 @@
                 </el-table-column>
             </el-table>
             <!-- 分页 -->
-            <Paging :total="total" :callback="getInformationData"></Paging>
+            <Paging :total="total" url="url"></Paging>
              <!-- 弹窗 -->
             <el-dialog :title="state ? 'Edit Student Information' : 'Add Student Information'" :visible.sync="dialogFormVisible" width="550px">
                 <el-form :model="form">
@@ -89,7 +89,8 @@
 </template>
 
 <script>
-import Paging from '@/components/common/PagingBackups.vue'
+import { getData,changeData, removeData } from '../../api/api'
+import Paging from '@/components/common/Paging.vue'
 export default {
     components: {
         Paging
@@ -120,78 +121,16 @@ export default {
             currentPage: 1,
             // 每页显示条数
             pageSize: 20,
+            url: 'information'
         }
     },
     created() {
+        getData(this,'information')
         // 初始化
-        this.getInformationData({
-            // pageSize: this.pageSize,
-            // currentPage: this.currentPage
-        })
-        // this.service.get('information/find')
-        // .then(res => {
-        //     if(res.status === 200) {
-        //         console.log(res);
-        //         res.data.data.forEach(item => {
-        //             switch(item.gender) {
-        //                 case "1":
-        //                     item.gender_text = "男"
-        //                     break;
-        //                 case "2":
-        //                     item.gender_text = "女"
-        //                     break;  
-        //             }
-        //         })
-        //         // es6展开运算符
-        //         this.total = res.data.total
-        //         this.tableData = [...res.data.data]
-        //     }
-        // })
-        // .catch(err => {
-        //     console.log(err);
+        // this.getInformationData({
         // })
     },
     methods: {
-        // getAttendanceData(url) {
-        //     this.service(url)
-        //     .then(res => {
-        //         if(res.data.status === 200) {
-        //             // console.log(res.data);
-        //             this.tableData = [...res.data.data]
-        //             this.total = res.data.total
-        //         }
-        //     })
-        //     .catch(err => {
-        //         // console.log(err);
-        //         throw err
-        //     })
-        // },
-        // searchHandle() {
-        //     // 非空校验
-        //     if(this.formInline.name === '') {
-        //         this.$message.error('The query condition cannot be empty!')
-        //         this.getAttendanceData('information/find')
-        //     }else {
-        //         // console.log(this.formInline.name);
-        //         this.service.get('information/find?name=' + this.formInline.name)
-        //         .then(res => {
-        //         this.formInline.name = ''
-        //         // console.log(res)
-        //         if(res.data.status === 200) {
-        //             this.tableData = [...res.data.data]
-        //         }else {
-        //             this.$message.error(res.data.msg)
-        //         }
-        //     })
-        //     .catch(err => {
-        //         throw err
-        //     })
-        //         } 
-        // },
-        // pageChanges(currentPage, pageSize) {
-        //     this.pageSize = pageSize;
-        //     this.currentPage = currentPage;
-        // },
         getInformationData(params) {
             this.service.get('information', { params: params || { pageSize:this.pageSize } })
             .then(res => {
@@ -211,48 +150,24 @@ export default {
                 throw err
             })
         },
+        // 查询
         searchHandle() {
-            this.getInformationData(this.formInline)
-            // console.log(this.formInline);
+            getData(this, 'information', this.formInline)
             this.formInline = {}
         },
+        // 刷新
         resetHandle() {
-            this.getInformationData()
+            getData(this, 'information')
         },
         AddConfirmHandle() {
             // 获取表单元素
             // console.log(this.form);
             if(this.state) {
                 // 修改
-                this.service.put('information', this.form)
-                .then(res => {
-                     this.dialogFormVisible = false
-                     this.$message({
-                         type: 'success',
-                         message: res.data.msg
-                     })
-                     this.getInformationData()
-                })
-                .catch(err => {
-                    throw err
-                })
+                changeData(this, 'put', 'information', this.form)
             }else {
                 // 新增
-                this.service.post('information', this.form)
-                .then(res => {
-                    // console.log(res);
-                    if(res.data.status === 200) {
-                        this.dialogFormVisible = false
-                        this.$message({
-                            type: 'success',
-                            message: res.data.msg
-                        })
-                        this.getInformationData()
-                    }
-                })
-                .catch(er => {
-                    throw err
-                })
+                changeData(this, 'post', 'information', this.form)
             }
             
         },
@@ -262,85 +177,61 @@ export default {
             this.dialogFormVisible = true
         },
         editHandle(row) {
-            // console.log(row);
-            // this.form = row;
             this.form = {...row}
             this.state = true
             this.dialogFormVisible = true
         },
         deleteHandle(row) {
-            this.$confirm('Are you sure to delete the student\'s information?', 'Delete Remind', {
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-            }).then(() => {
-                let obj = { idNumber: row.idNumber, name: row.name }
-                this.service.delete('information', { params: obj })
-                .then(res => {
-                    if(res.data.status === 200) {
-                        this.$message({
-                        type: 'success',
-                        message: res.data.msg
-                    });
-                    this.getInformationData()
-                    }
-                })
-                .catch(err => {
-                    throw err
-                })
-            }).catch(() => {
-            this.$message({
-                type: 'info',
-                message: 'Cancelled delete'
-            });          
-            });
+            // 删除
+            let obj = { idNumber: row.idNumber, name: row.name }
+            removeData(this, 'information', obj)
         },
     }
 }
 </script>
 
 <style scoped>
-.student-information {
+.information-list {
     height: calc(100vh - 284px);
 }
-.student-information>.el-form {
+.information-list>.el-form {
     text-align: left;
     min-width: 1090px;
 }
-.student-information>.el-form .el-button.btn-addition,
-.student-information>.el-form .el-button.btn-search {
+.information-list>.el-form .el-button.btn-addition,
+.information-list>.el-form .el-button.btn-search {
     background-color: #10401c;
     border-color: #10401c;
     color: #d3d6d9;
 }
-.student-information .el-table .el-button.btn-edit {
+.information-list .el-table .el-button.btn-edit {
     background-color: #10401c;
     border-color: #10401c;
     color: #d3d6d9;
 }
-.student-information>.el-form .el-button.btn-reset,
-.student-information .el-table .el-button.btn-del {
+.information-list>.el-form .el-button.btn-reset,
+.information-list .el-table .el-button.btn-del {
     background-color: rgba(255, 204, 102, .5);
     border-color: rgba(16, 64, 28, .2);
     color: #10401c;
 }
-.student-information .el-dialog .el-form-item {
+.information-list .el-dialog .el-form-item {
     text-align: left;
 }
-.student-information .el-dialog .el-select {
+.information-list .el-dialog .el-select {
     width: 100%;
 }
-.student-information .el-dialog .dialog-footer .btn-cancel {
+.information-list .el-dialog .dialog-footer .btn-cancel {
     color: #10401c;
     border-color: #10401c;
 }
-.student-information .el-dialog .dialog-footer .btn-confirm {
+.information-list .el-dialog .dialog-footer .btn-confirm {
     background-color: #10401c;
     color: #d3d6d9;
     border-color: #10401c;
 }
-.student-information .el-dialog .dialog-footer .btn-cancel:focus,
-.student-information .el-dialog .dialog-footer .btn-cancel:hover {
+.information-list .el-dialog .dialog-footer .btn-cancel:focus,
+.information-list .el-dialog .dialog-footer .btn-cancel:hover {
     background-color: rgba(16,64,28,.1);
 }
 </style>

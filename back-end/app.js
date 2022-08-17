@@ -24,7 +24,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // 跨域设置
 app.all('*', function(req,res,next) {
@@ -40,6 +41,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/login', require('./routes/login'));
 app.use('/attendance', require('./routes/attendance'));
+app.use('/list', require('./routes/list'));
+app.use('/information', require('./routes/information'));
+app.use('/data', require('./routes/dataView'));
+app.use('/menu', require('./routes/menu'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

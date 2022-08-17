@@ -9,17 +9,17 @@
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
-            :url="url">
+            :callback="callback">
         </el-pagination>
     </div>
 </template>
 
 <script>
-import { getData } from '../../api/api'
+
 export default {
     props: {
         'total': Number,
-        'url': String
+        'callback': Function
     },
     data() {
         return {
@@ -32,7 +32,9 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val
             this.currentPage = 1
-            getData(this.$parent, this.url,{ pageSize: val })
+            this.callback({ pageSize: val })
+        // console.log(`每页 ${val} 条`);
+            // this.$emit("numChange", this.currentPage, this.pageSize)
         },
         handleCurrentChange(val) {
             this.currentPage = val
@@ -40,7 +42,9 @@ export default {
                 currentPage: this.currentPage,
                 pageSize: this.pageSize
             }
-            getData(this.$parent, this.url, obj)
+            this.callback(obj)
+            // console.log(`当前页: ${val}`);
+            // this.$emit("numChange", this.currentPage, this.pageSize)
         }
     }
 }

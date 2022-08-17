@@ -11,18 +11,17 @@
                     <el-form-item label="Name">
                         <el-input v-model="formInline.name" placeholder="Please enter student name"></el-input>
                     </el-form-item>
-                    <el-form-item label="StudentID">
-                        <el-select v-model="formInline.studentId" placeholder="Please enter StudentId">
-                        </el-select>
+                    <el-form-item label="studentId">
+                        <el-input v-model="formInline.studentId" placeholder="Please enter studentId"></el-input>
                     </el-form-item>
-                    <el-form-item label="Class">
-                        <el-select v-model="formInline.class" placeholder="Please select a class">
-                        <el-option label="Class01" value="1"></el-option>
-                        <el-option label="Class02" value="2"></el-option>
+                    <el-form-item label="className">
+                        <el-select v-model="formInline.className" placeholder="Please select a className">
+                        <el-option label="class01" value="1"></el-option>
+                        <el-option label="class02" value="2"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
-                        <el-button class="btn-search" type="primary" @click="onSubmit" icon="el-icon-search">Search</el-button>
+                        <el-button class="btn-search" type="primary" @click="searchHandle" icon="el-icon-search">Search</el-button>
                     </el-form-item>
                 </div>
             </el-form>
@@ -31,8 +30,8 @@
                 <el-table-column fixed align="center" prop="name" label="Name" width="120"></el-table-column>
                 <el-table-column align="center" prop="gender_text" label="Gender" width="120"></el-table-column>
                 <el-table-column align="center" prop="age" label="Age" width="120"></el-table-column>
-                <el-table-column align="center" prop="studentid" label="Student ID"></el-table-column>
-                <el-table-column align="center" prop="class" label="Class"></el-table-column>
+                <el-table-column align="center" prop="studentId" label="Student ID"></el-table-column>
+                <el-table-column align="center" prop="className_text" label="Class"></el-table-column>
                 <el-table-column align="center" prop="state_text" label="State" width="120"></el-table-column>
                 <el-table-column align="center" prop="address" label="Address"></el-table-column>
                 <el-table-column align="center" prop="concat" label="Concat"></el-table-column>
@@ -44,77 +43,98 @@
                 </el-table-column>
             </el-table>
             <!-- 分页 -->
-            <Paging :total="total" @numChange="pageChanges"></Paging>
+            <!-- <Paging :total="total" @numChange="pageChanges"></Paging> -->
+                <div class="paging">
+                <el-pagination
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="pageSize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
+                </el-pagination>
+            </div>
              <!-- 弹窗 -->
             <el-dialog :title="state ? 'Edit Student Information' : 'Add Student Information'" :visible.sync="dialogFormVisible" width="520px">
-                <el-form :model="form">
-                    <el-form-item label="Name" :label-width="formLabelWidth">
+                <el-form :model="form" :rules="rules" ref="form">
+                    <el-form-item label="Name" :label-width="formLabelWidth" prop="name">
                         <el-input v-model="form.name" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="Gender" :label-width="formLabelWidth">
+                    <el-form-item label="Gender" :label-width="formLabelWidth" prop="gender">
                         <el-radio v-model="form.gender" label="1">Male</el-radio>
                         <el-radio v-model="form.gender" label="2">Female</el-radio>
                     </el-form-item>
-                    <el-form-item label="Age" :label-width="formLabelWidth">
+                    <el-form-item label="Age" :label-width="formLabelWidth" prop="age">
                         <el-input v-model="form.age" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="StudentID" :label-width="formLabelWidth">
-                        <el-input v-model="form.studentid" autocomplete="off"></el-input>
+                    <el-form-item label="studentId" :label-width="formLabelWidth" prop="studentId">
+                        <el-input v-model="form.studentId" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="Class" :label-width="formLabelWidth">
-                    <el-select v-model="form.class" placeholder="Please select a class">
+                    <el-form-item label="ClassName" :label-width="formLabelWidth" prop="className">
+                    <el-select v-model="form.className" placeholder="Please select a class">
                         <el-option label="class01" value="1"></el-option>
                         <el-option label="class02" value="2"></el-option>
                     </el-select>
                     </el-form-item>
-                    <el-form-item label="State" :label-width="formLabelWidth">
+                    <el-form-item label="State" :label-width="formLabelWidth" prop="state">
                         <el-select v-model="form.state" placeholder="Please select status">
                             <el-option label="在读" value="1"></el-option>
                             <el-option label="结业" value="2"></el-option>
                             <el-option label="休学" value="3"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="Address" :label-width="formLabelWidth">
+                    <el-form-item label="Address" :label-width="formLabelWidth" prop="address">
                         <el-input v-model="form.address" autocomplete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="Concat" :label-width="formLabelWidth">
+                    <el-form-item label="Concat" :label-width="formLabelWidth" prop="concat">
                         <!-- autocomplete自动补全记忆属性 -->
                         <el-input v-model="form.concat" autocomplete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button class="btn-cancel" @click="dialogFormVisible = false">Cancel</el-button>
-                    <el-button class="btn-confirm fontWeight" type="primary" @click="AddConfirmHandle()">Confirm</el-button>
+                    <el-button class="btn-confirm fontWeight" type="primary" @click="AddConfirmHandle('form')">Confirm</el-button>
                 </div>
             </el-dialog>
     </div>
 </template>
 
 <script>
-import Paging from '@/components/common/Paging.vue'
+// import Paging from '@/components/common/Paging.vue'
 export default {
-    components: {
-        Paging
-    },
+    // components: {
+    //     Paging
+    // },
     props: {
         'total': Number
     },
     data() {
         return {
-            tableData: [
-            ],
+            rules: {
+                name:[{ required: true, message: 'The name cannot be empty!' }],
+                gender:[{ required: true }],
+                age:[{ required: true, message: 'The age cannot be empty!' }],
+                studentId:[{ required: true, message: 'The student cannot be empty!' }],
+                className:[{ required: true }],
+                state:[{ required: true }],
+                address:[{ required: true, message: 'The address cannot be empty!' }],
+                concat:[{ required: true, message: 'The concat cannot be empty!' }],
+            },
+            tableData: [],
             formInline: {
                 name: '',
                 studentId: '',
-                class: ''
+                className: ''
                 },
             dialogFormVisible: false,
             form: {
                 name: '',
                 gender: '1',
                 age: '',
-                studentid: '',
-                class: '1',
+                studentId: '',
+                className: '1',
                 state: '1',
                 address: '',
                 concat: '',
@@ -128,48 +148,150 @@ export default {
         }
     },
     created() {
-        this.service.get('studentlist')
-        .then(res => {
-            if(res.status === 200) {
-                // console.log(res);
+        this.getListData('list')
+    },
+    methods: {
+        getListData(url, obj) {
+            this.service.get(url, obj)
+            .then(res => {
+            console.log(res);
+            if(res.data.status === 200) {
                 res.data.data.forEach(item => {
-                    switch(item.gender) {
-                        case "1":
-                            item.gender_text = "男"
-                            break;
-                        case "2":
-                            item.gender_text = "女"
-                            break;  
+                    if(item.gender === '1') {
+                        item.gender_text = 'Male'
+                    }else if(item.gender === '2'){
+                        item.gender_text = 'Female'
                     }
-                    switch(item.state) {
-                        case "1":
-                            item.state_text = "在读"
-                            break;
-                        case "2":
-                            item.state_text = "毕业"
-                            break;
+                    if(item.className === '1') {
+                        item.className_text = 'class01'
+                    }else if(item.className === '2') {
+                        item.className_text = 'class02'
+                    }
+                    if(item.state === '1') {
+                        item.state_text = '在读'
+                    }else if(item.state === '2') {
+                        item.state_text = '结业'
+                    }else {
+                        item.state_text = '休学'
                     }
                 })
-                // es6展开运算符
-                this.total = res.data.total
                 this.tableData = [...res.data.data]
             }
         })
         .catch(err => {
-            console.log(err);
-        })
-    },
-    methods: {
-        onsubmit() {
-            console.log('submit!');
+            throw err
+        }) 
         },
-        // 分页
-        pageChanges(currentPage, pageSize) {
-            console.log(currentPage, pageSize);
-            this.pageSize = pageSize
-            this.currentPage = currentPage
+        searchHandle() {
+            this.service.get('list', { params: this.formInline })
+            .then(res => {
+                if(res.data.status === 200) {
+                    this.formInline = {}
+                    res.data.data.forEach(item => {
+                    if(item.gender === '1') {
+                        item.gender_text = 'Male'
+                    }else if(item.gender === '2'){
+                        item.gender_text = 'Female'
+                    }
+                    if(item.className === '1') {
+                        item.className_text = 'class01'
+                    }else if(item.className === '2') {
+                        item.className_text = 'class02'
+                    }
+                    if(item.state === '1') {
+                        item.state_text = '在读'
+                    }else if(item.state === '2') {
+                        item.state_text = '结业'
+                    }else {
+                        item.state_text = '休学'
+                    }
+                })
+                    this.tableData = [...res.data.data]
+                    this.total = res.data.total
+                }
+                // console.log(res)
+            })
+            .catch(err => {
+                throw err
+            })
         },
-        AddConfirmHandle() {
+        addOrUpdateListData(method, url, data, form) {
+            // 添加
+            // this.service.get('list', { params: this.form })
+            this.service[method](url, data)
+            .then(res => {
+                // console.log(res);
+                if(res.data.status === 200) {
+                    this.$refs[form].resetFields()
+                    this.$message({
+                        type: 'success',
+                        message: res.data.msg
+                    })
+                    // 清空表单
+                    this.form = {}
+                    this.dialogFormVisible = false
+                    this.getListData(url)
+                }
+            })
+            .catch(err => {
+                throw err
+            })
+        },
+        AddConfirmHandle(form) {
+            this.$refs[form].validate(valid => {
+                if(valid) {
+                    // 获取表单元素
+                    console.log(this.form);
+                    // 根据状态判断新增还是修改，然后调用对应接口
+                    if(!this.state) {
+                        this.addOrUpdateListData('post', 'list', this.form, form)
+
+                        // 添加
+                        // this.service.get('list', { params: this.form })
+                        // this.service.post('list', this.form)
+                        // .then(res => {
+                        //     // console.log(res);
+                        //     if(res.data.status === 200) {
+                        //         this.$refs[form].resetFields()
+                        //         this.$message({
+                        //             type: 'success',
+                        //             message: res.data.msg
+                        //         })
+                        //         // 清空表单
+                        //         this.form = {}
+                        //         this.dialogFormVisible = false
+                        //         this.getListData('list')
+                        //     }
+                        // })
+                        // .catch(err => {
+                        //     throw err
+                        // })
+                    }else {
+                        // 修改
+                        this.addOrUpdateListData('put', 'list', this.form, form)
+                        // this.service.put('list', this.form)
+                        // .then(res => {
+                        //     if(res.data.status === 200) {
+                        //         // console.log(res);
+                        //         // 表单校验
+                        //         this.$refs[form].resetFields()
+                        //         this.$message({ 
+                        //             type: 'success',
+                        //             message: res.data.msg
+                        //         })
+                        //         this.form = {}
+                        //         this.dialogFormVisible = false
+                        //         this.getListData('list')
+                        //     }
+                        // })
+                        // .catch(err => {
+                        //     throw err
+                        // })
+                    }
+                }else {
+                    console.error(this.form)
+                }
+            })
             this.dialogFormVisible = false
             //获取表单元素
             console.log(this.form);
@@ -186,6 +308,7 @@ export default {
             this.state = true
             this.dialogFormVisible = true
         },
+        // 删除
         deleteHandle(row) {
         // 写法一：
             this.$confirm('Are you sure to delete the student\'s information?', 'Delete Remind', {
@@ -193,10 +316,25 @@ export default {
             cancelButtonText: 'Cancel',
             type: 'warning'
             }).then(() => {
-            this.$message({
-                type: 'success',
-                message: `Delete ${row.name}\'s information has succeed!`
-            });
+            console.log(row)
+            // 后端接收
+            let obj = { studentId: row.studentId, name:row.name }
+            this.service.delete('list', { params:obj })
+            .then(res => {
+                // console.log(res)
+                if(res.data.status === 200) {
+                    this.$message({
+                    type: 'success',
+                    // message: `Delete ${row.name}\'s information has succeed!`
+                    message: res.data.msg
+                });
+                this.getListData('list')
+                }
+            })
+            .catch(err => {
+                throw err
+            })
+            
             }).catch(() => {
             this.$message({
                 type: 'info',
@@ -214,6 +352,23 @@ export default {
             //    } 
             // })
         },
+        handleSizeChange(val) {
+            this.pageSize = val
+            this.currentPage = 1
+            // this.getAttendanceData('attendance/page?pageSize=' + val)
+            this.getListData('list', { params: {pageSize: val} })
+            console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+            this.currentPage = val
+            let obj = {
+                params: {
+                    currentPage: this.currentPage,
+                    pageSize: this.pageSize
+                }
+            }
+            this.getListData('list', obj)
+        }
     }
 }
 </script>
@@ -260,5 +415,9 @@ export default {
 .student-list .el-dialog .dialog-footer .btn-cancel:focus,
 .student-list .el-dialog .dialog-footer .btn-cancel:hover {
     background-color: rgba(16,64,28,.1);
+}
+.student-list .el-pagination {
+    margin-top: 20px;
+    text-align: right;
 }
 </style>

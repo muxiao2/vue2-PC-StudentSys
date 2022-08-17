@@ -93,7 +93,7 @@ export default {
             // 非空校验
             if(this.formInline.name === '') {
                 this.$message.error('The query condition cannot be empty!')
-                this.getAttendanceData()
+                this.getAttendanceData('attendance/find')
             }else {
                 // console.log(this.formInline.name);
                 this.service.get('attendance/find?name=' + this.formInline.name)

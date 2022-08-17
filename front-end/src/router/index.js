@@ -78,10 +78,54 @@ export default new Router({
           name: 'Student Information',
           iconClass:'fas fa-user-lock',
           component: () => import('@/components/students/StudentInformation')
+        },
+        {
+          path: '/students/infoList',
+          name: 'Information List',
+          iconClass:'fas fa-list-alt',
+          component: () => import('@/components/students/InformationList')
         }
       ]
     },
-    
+    {
+      path: '/students',
+      name: 'Data Analysis',
+      iconClass:'fas fa-database',
+      component: () => import('@/components/Students'),
+      children: [
+        {
+          path: '/dataAnalysis/dataOverview',
+          name: 'Data Overview',
+          iconClass: 'fas fa-chart-line',
+          component: () => import('@/components/dataAnalysis/DataOverview'),
+        },
+        {
+          path: '/dataAnalysis/mapData',
+          name: 'Map Data',
+          iconClass: 'fas fa-map-marker-alt',
+          component: () => import('@/components/dataAnalysis/MapData'),
+        },
+        {
+          path: '/dataAnalysis/travelMap',
+          name: 'Travel Map',
+          iconClass: 'fas fa-map-pin',
+          component: () => import('@/components/dataAnalysis/TravelMap'),
+        },
+        {
+          path: '/dataAnalysis/percentage',
+          name: 'percentage',
+          iconClass: 'fas fa-map-pin',
+          component: () => import('@/components/dataAnalysis/percentage'),
+        },
+        {
+          path: '/dataAnalysis/tfourtong',
+          name: 'tfourtong',
+          iconClass: 'fas fa-map-pin',
+          component: () => import('@/components/dataAnalysis/tfourtong'),
+        },
+        
+      ]
+    },
   ],
   mode: 'history'
 })
