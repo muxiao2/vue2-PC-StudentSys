@@ -8,15 +8,6 @@
 
 #### 1.1 新建Vue和Express项目
 
-```shell
-vue init webpack front-end
-```
-
-```shell
-npm install -g express-generator
-express --view=ejs back-end
-```
-
 #### 1.2 使用history路由模式
 #### 1.3 运行项目自动在浏览器打开
 ### 二、ElementUi
@@ -24,10 +15,6 @@ express --view=ejs back-end
 #### 2.1 全局使用
 
 ##### 2.1.1 安装
-
-```shell
-npm i element-ui -S
-```
 
 
 ### 三、样式重置
@@ -46,29 +33,13 @@ CSS Tools: Reset CSS：https://meyerweb.com/eric/tools/css/reset/
 
 #### 6.1 官方推荐：懒加载
 
-```js
-component: () => import('@/components/Home')
-```
-
 #### 6.2 require
 
-**注意：使用require方式时，component是复数形式的components**
-
-```js
-components: require('@/components/Login')
-```
+**注意：使用require方式时，component是复数形式的components*
 
 ### 七、404NotFound
 
 使用通配符 `*` 全局匹配路由
-
-```js
-{
-    path: '*',
-	name: 'NotFound',
-	component: () => import('@/components/NotFound')
-}
-```
 
 ### 八、学生管理模块
 
@@ -100,26 +71,13 @@ FontAwesome 4：https://fontawesome.dashgame.com/
 
 FontAwesome 5+：https://fa5.dashgame.com/#/
 
-##### 9.4.1 FontAwesome4
+##### 9.4.1 FontAwesome4下载
 
-###### 下载
+##### 9.4.2 FontAwesome5+下载
 
-```shell
-npm install font-awesome --save
-```
-
-##### 9.4.2 FontAwesome5+
-
-###### 下载
-
-```shell
-npm install --save-dev @fortawesome/fontawesome-free
-```
 ### 十、公共组件抽离封装
 
-优化：根路径重定向
-
-抽离Students的Header、Footer和Menu
+优化：根路径重定向,抽离Students的Header、Footer和Menu
 
 ### 十一、Page_StudentList
 
@@ -163,8 +121,6 @@ Studio 3T：https://studio3t.com/download-studio3t-free
 #### 15.5 登录接口
 
 **报错：**跨域问题
-
-![](media\02.png)
 
 #### 15.6 解决跨域的方法
 
@@ -222,49 +178,7 @@ fetch -->  es6
 
 # back-end
 
-打开back-end终端
-
-```shell
-npm start
-```
-
-启动express，管理员运行命令启动
-```shell
-mongod
-```
-
-除了自带的compass可视化工具还能用studio 3T
-
-
-
-发现问题跨域(一般后端处理)
-
-解决方法一：在后端的app.js中
-
-```js
-// 跨域设置
-app.all('*', function(req,res,next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-headers', 'Content-type,Content-length,Authorization,Accept,X-request-With');
-  res.header('Access-Control-Allow-Methods','GET,POST,PUT,DELETE,OPTIONS');
-  req.header('X-powered-by','3.2.1');
-  if(req.method === 'OPTIONS') res.send(200)
-  else next();
-})
-
-```
-
-解决方法二：在前端的config文件夹下index.js 中(项目打包就会出问题)
-
-```js
- '/api': {
-         target:'http://localhost:3000/',//后端接口地址
-         changeOrigin:true,//是否跨域
-         pathRewrite: {
-           '^/api': ''//以api开头的url才会开始转发，当访问localhost:8000/login转localhost:3000,要在baseURL中改/api
-         }//设置转发
-       }
-```
+打开back-end终端,启动express，管理员运行命令启动除了自带的compass可视化工具还能用studio 3T
 
 #### 16.4 接口合并及优化
 
@@ -303,145 +217,10 @@ config1.js：
 
 #### 19.3 封装查询数据的方法
 
-据的方法
- * @author Cherry
- * @date 某年某月某日
- * @param {String} collectionName：具体要操作的集合
- * @param {Object} json：查询条件
- */
-exports.search = async function(collectionName, json, res) {
-    let client = await connectDB(url)
-    let db = client.db('parctice')
-    let total = await db.collection(collectionName).find().count()
-    db.collection(collectionName).find(json).toArray((err, result) => {
-        if(err) throw err
-        client.close().then(() => {
-            console.log('SHUTDOWN')
-        })
-        res.send({ status: 200, data: result, total: total })
-    })
-}
-```
-
-information.js：
-
-```js
-router.get('/', (req, res) => {
-    mdb.search('information', req.query, res)
-});
-```
-
 #### 19.4 封装修改数据的方法
 
-config1.js：
-
-```js
-/**
- * @desc 修改数据库中数据的方法
- * @author Cherry
- * @date 某年某月某日
- * @param {String} collectionName：具体要操作的集合
- * @param {Object} json1：查询条件
- * @param {Object} json2：要修改的内容
- */
-exports.update = async function(collectionName, json1, json2, res) {
-    let client = await connectDB(url)
-    let db = client.db('parctice')
-    db.collection(collectionName).updateOne(json1, json2, err => {
-        if(err) throw err
-        client.close().then(() => {
-            console.log('SHUTDOWN')
-        })
-        res.send({ status: 200, msg: 'Data Modification succeeded' })
-    })
-}
-```
-
-information.js：
-
-```js
-router.put('/', (req, res) => {
-    const { name, gender, age, birthDate, idNumber, father, mother, homeAddress, inDate, concat } = req.body
-    mdb.update('information', { idNumber: req.body.idNumber }, {
-        $set: {
-            name,
-            gender,
-            age,
-            birthDate,
-            idNumber,
-            father,
-            mother,
-            homeAddress,
-            inDate,
-            concat
-        }
-    }, res)
-});
-```
-
 #### 19.5 封装删除数据的方法
-
-config1.js：
-
-```js
-/**
- * @desc 修改数据库中数据的方法
- * @author Cherry
- * @date 某年某月某日
- * @param {String} collectionName：具体要操作的集合
- * @param {Object} json：要删除的数据条件
- */
-exports.remove = async function(collectionName, json, res) {
-    let client = await connectDB(url)
-    let db = client.db('parctice')
-    db.collection(collectionName).remove(json, (err, result) => {
-        if(err) throw err
-        client.close().then(() => {
-            console.log('SHUTDOWN')
-        })
-        res.send({ status: 200, msg: `Delete ${json.name}\'s information has succeeded` })
-    })
-}
-```
-
-information.js：
-
-```js
-router.delete('/', (req, res) => {
-  mdb.remove('information', req.query, res)
-})
-```
 
 #### 19.6 优化：重置
 
 #### 19.7 分页
-
-config1.js：
-
-```js
-/**
- * @desc 查询数据库中数据的方法
- * @author Cherry
- * @date 某年某月某日
- * @param {String} collectionName：具体要操作的集合
- * @param {Object} json：查询条件
- */
-exports.search = async function(collectionName, json, res) {
-    let client = await connectDB(url)
-    let db = client.db('parctice')
-    let total = await db.collection(collectionName).find().count()
-    let skip = (Number(json.currentPage - 1)) * Number(json.pageSize)
-    let data = db.collection(collectionName).find(json.name ? json : {}).limit(Number(json.pageSize)).skip(skip || 0)
-    data.toArray((err, result) => {
-        if(err) throw err
-        client.close().then(() => {
-            console.log('SHUTDOWN')
-        })
-        res.send({ status: 200, data: result, total: total })
-    })
-}
-```
-
-```js
-
-```
